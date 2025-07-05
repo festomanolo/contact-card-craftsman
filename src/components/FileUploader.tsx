@@ -1,5 +1,6 @@
+
 import { useState, useCallback } from 'react';
-import { Upload, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { Upload, FileSpreadsheet, AlertCircle, Sparkles, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { parseSpreadsheet, SpreadsheetData } from '@/lib/parseSpreadsheet';
@@ -61,47 +62,70 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
     <div className="w-full">
       <div
         className={`
-          border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300
+          relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-500 transform
           ${isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400'
+            ? 'border-cyan-400 bg-cyan-400/10 scale-105 shadow-2xl shadow-cyan-500/25' 
+            : 'border-white/30 hover:border-white/50 hover:scale-102'
           }
           ${isLoading ? 'opacity-50 pointer-events-none' : ''}
+          backdrop-blur-sm bg-white/5
         `}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onDragEnter={() => setIsDragging(true)}
         onDragLeave={() => setIsDragging(false)}
       >
-        <div className="flex flex-col items-center space-y-4">
-          <div className={`p-4 rounded-full ${isDragging ? 'bg-blue-100' : 'bg-gray-100'}`}>
+        {/* Animated Background */}
+        <div className="absolute inset-0 rounded-3xl overflow-hidden">
+          <div className={`absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 transition-opacity duration-500 ${isDragging ? 'opacity-100' : 'opacity-0'}`}></div>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center space-y-8">
+          <div className={`relative p-6 rounded-full transition-all duration-500 ${isDragging ? 'bg-cyan-400/20 scale-110' : 'bg-white/10'}`}>
             {isLoading ? (
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="relative">
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-400 border-t-transparent"></div>
+                <Zap className="absolute inset-0 m-auto h-8 w-8 text-cyan-400 animate-pulse" />
+              </div>
             ) : (
-              <FileSpreadsheet className={`h-8 w-8 ${isDragging ? 'text-blue-600' : 'text-gray-500'}`} />
+              <div className="relative">
+                <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-xl opacity-50 ${isDragging ? 'animate-pulse' : ''}`}></div>
+                <FileSpreadsheet className={`relative h-16 w-16 ${isDragging ? 'text-cyan-400 animate-bounce' : 'text-white'} transition-colors duration-300`} />
+              </div>
             )}
           </div>
           
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {isLoading ? 'Processing...' : 'Upload Spreadsheet'}
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold text-white">
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 animate-spin" />
+                  Processing Magic...
+                </span>
+              ) : (
+                'Upload Spreadsheet'
+              )}
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-white/70 text-lg mb-6">
               Drag and drop your file here, or click to browse
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-white/50">
               Supports .xlsx, .csv, and .ods files
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button
               onClick={() => document.getElementById('file-input')?.click()}
               disabled={isLoading}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="relative group bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg rounded-2xl shadow-xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
             >
-              <Upload className="h-4 w-4 mr-2" />
-              Choose File
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+              <div className="relative flex items-center">
+                <Upload className="h-5 w-5 mr-3" />
+                Choose File
+                <Sparkles className="h-4 w-4 ml-3 animate-pulse" />
+              </div>
             </Button>
             
             <input
@@ -116,9 +140,9 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
       </div>
 
       {error && (
-        <Alert className="mt-4 border-red-200 bg-red-50">
-          <AlertCircle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-700">
+        <Alert className="mt-6 border-red-400/50 bg-red-500/10 backdrop-blur-sm rounded-2xl">
+          <AlertCircle className="h-5 w-5 text-red-400" />
+          <AlertDescription className="text-red-300 text-base">
             {error}
           </AlertDescription>
         </Alert>

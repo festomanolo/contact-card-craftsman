@@ -1,12 +1,11 @@
-
 import { useState, useCallback } from 'react';
 import { Upload, FileSpreadsheet, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { parseSpreadsheet } from '@/lib/parseSpreadsheet';
+import { parseSpreadsheet, SpreadsheetData } from '@/lib/parseSpreadsheet';
 
 interface FileUploaderProps {
-  onFileSelect: (file: File, data: any[]) => void;
+  onFileSelect: (file: File, data: SpreadsheetData) => void;
 }
 
 const FileUploader = ({ onFileSelect }: FileUploaderProps) => {

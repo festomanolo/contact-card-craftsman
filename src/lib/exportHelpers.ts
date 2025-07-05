@@ -36,7 +36,7 @@ const downloadBlob = (blob: Blob, filename: string) => {
 export const shareFile = async (content: string, filename: string, mimeType: string) => {
   try {
     // Try using Capacitor Share API if available
-    if (window.Capacitor) {
+    if ((window as any).Capacitor) {
       const { Share } = await import('@capacitor/share');
       await Share.share({
         title: 'Exported Data',

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileSpreadsheet, Smartphone, Download, Users, Analytics } from 'lucide-react';
+import { Upload, FileSpreadsheet, Smartphone, Download, Users, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import FileUploader from '@/components/FileUploader';
@@ -22,7 +22,7 @@ const Index = () => {
       description: "Generate .vcf contact cards from spreadsheet data"
     },
     {
-      icon: Analytics,
+      icon: BarChart3,
       title: "Smart Analysis",
       description: "Detect duplicates, group data, and find missing information"
     },

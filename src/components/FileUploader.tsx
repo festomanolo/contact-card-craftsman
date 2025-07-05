@@ -1,6 +1,6 @@
 
 import { useState, useCallback } from 'react';
-import { Upload, FileSpreadsheet, AlertCircle, Sparkles, Zap } from 'lucide-react';
+import { Upload, FileSpreadsheet, AlertCircle, Sparkles, Zap, Layers, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { parseSpreadsheet, SpreadsheetData } from '@/lib/parseSpreadsheet';
@@ -62,69 +62,77 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
     <div className="w-full">
       <div
         className={`
-          relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-500 transform
+          relative glass-card liquid-gradient p-16 text-center transition-all duration-500 transform hover-glass
           ${isDragging 
-            ? 'border-cyan-400 bg-cyan-400/10 scale-105 shadow-2xl shadow-cyan-500/25' 
-            : 'border-white/30 hover:border-white/50 hover:scale-102'
+            ? 'scale-105 border-cyan-400/50' 
+            : 'hover:scale-102'
           }
           ${isLoading ? 'opacity-50 pointer-events-none' : ''}
-          backdrop-blur-sm bg-white/5
         `}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onDragEnter={() => setIsDragging(true)}
         onDragLeave={() => setIsDragging(false)}
       >
-        {/* Animated Background */}
-        <div className="absolute inset-0 rounded-3xl overflow-hidden">
-          <div className={`absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 transition-opacity duration-500 ${isDragging ? 'opacity-100' : 'opacity-0'}`}></div>
+        {/* Animated Background Effects */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl">
+          <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/20 via-blue-500/20 to-purple-500/20 transition-opacity duration-500 ${isDragging ? 'opacity-100' : 'opacity-0'}`}></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-4 right-4">
+            <Layers className="h-8 w-8 text-white/30 animate-float-gentle" />
+          </div>
+          <div className="absolute bottom-4 left-4">
+            <Cpu className="h-6 w-6 text-white/20 animate-pulse-smooth" />
+          </div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center space-y-8">
-          <div className={`relative p-6 rounded-full transition-all duration-500 ${isDragging ? 'bg-cyan-400/20 scale-110' : 'bg-white/10'}`}>
+        <div className="relative z-10 flex flex-col items-center space-y-10">
+          <div className={`relative transition-all duration-500 ${isDragging ? 'scale-110' : ''}`}>
             {isLoading ? (
-              <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-400 border-t-transparent"></div>
-                <Zap className="absolute inset-0 m-auto h-8 w-8 text-cyan-400 animate-pulse" />
+              <div className="relative glass-card p-8 rounded-full">
+                <div className="absolute inset-0 rounded-full">
+                  <div className="w-20 h-20 border-4 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin"></div>
+                </div>
+                <Zap className="relative h-10 w-10 text-cyan-400 animate-pulse-smooth mx-auto" />
               </div>
             ) : (
-              <div className="relative">
-                <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-xl opacity-50 ${isDragging ? 'animate-pulse' : ''}`}></div>
-                <FileSpreadsheet className={`relative h-16 w-16 ${isDragging ? 'text-cyan-400 animate-bounce' : 'text-white'} transition-colors duration-300`} />
+              <div className="relative glass-card p-8 rounded-full">
+                <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 blur-2xl opacity-40 ${isDragging ? 'animate-pulse-smooth' : ''}`}></div>
+                <FileSpreadsheet className={`relative h-20 w-20 ${isDragging ? 'text-cyan-300 animate-bounce' : 'text-white'} transition-all duration-300`} />
               </div>
             )}
           </div>
           
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-white">
+          <div className="space-y-6 text-center">
+            <h3 className="text-3xl font-bold text-white">
               {isLoading ? (
-                <span className="flex items-center gap-2">
-                  <Sparkles className="h-6 w-6 animate-spin" />
+                <span className="flex items-center gap-3 liquid-text">
+                  <Sparkles className="h-8 w-8 animate-spin" />
                   Processing Magic...
                 </span>
               ) : (
-                'Upload Spreadsheet'
+                <span className="liquid-text">Upload Spreadsheet</span>
               )}
             </h3>
-            <p className="text-white/70 text-lg mb-6">
+            <p className="text-white/80 text-xl leading-relaxed max-w-md">
               Drag and drop your file here, or click to browse
             </p>
-            <p className="text-sm text-white/50">
+            <p className="text-white/60 text-lg">
               Supports .xlsx, .csv, and .ods files
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-6">
             <Button
               onClick={() => document.getElementById('file-input')?.click()}
               disabled={isLoading}
-              className="relative group bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg rounded-2xl shadow-xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105"
+              className="btn-liquid text-white border-0 px-10 py-4 text-xl rounded-3xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden group"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-              <div className="relative flex items-center">
-                <Upload className="h-5 w-5 mr-3" />
+              <div className="flex items-center relative z-10">
+                <Upload className="h-6 w-6 mr-4" />
                 Choose File
-                <Sparkles className="h-4 w-4 ml-3 animate-pulse" />
+                <Sparkles className="h-5 w-5 ml-4 animate-pulse-smooth" />
               </div>
             </Button>
             
@@ -140,12 +148,14 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
       </div>
 
       {error && (
-        <Alert className="mt-6 border-red-400/50 bg-red-500/10 backdrop-blur-sm rounded-2xl">
-          <AlertCircle className="h-5 w-5 text-red-400" />
-          <AlertDescription className="text-red-300 text-base">
-            {error}
-          </AlertDescription>
-        </Alert>
+        <div className="mt-8 animate-slide-up">
+          <Alert className="glass-card border-red-400/50 p-6 rounded-2xl">
+            <AlertCircle className="h-6 w-6 text-red-400" />
+            <AlertDescription className="text-red-300 text-lg ml-3">
+              {error}
+            </AlertDescription>
+          </Alert>
+        </div>
       )}
     </div>
   );
